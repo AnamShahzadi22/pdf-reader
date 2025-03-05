@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'package:external_path/external_path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as path;
+import 'package:flutter/services.dart' show ByteData, rootBundle;
 import 'package:pdf_reader/pdf_view_screen.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path/path.dart ' as path;
-import 'package:secure_application/secure_application.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,147 +19,143 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    baseDirectory();
+    copyBundledPdfs().then((_) {
+      loadPDFFiles();
+    });
   }
 
-  ///get permission and root directory toget all pdf from every folder in hte storage
-  Future<void> baseDirectory() async {
-    PermissionStatus permissionStatus =
-        await Permission.manageExternalStorage.request();
-    if (permissionStatus.isGranted) {
-      var rootDirectory = await ExternalPath.getExternalStorageDirectories();
-      await getFiles(rootDirectory!.first);
+  /// Copies PDFs from assets to the app's storage if they don't already exist
+  Future<void> copyBundledPdfs() async {
+    List<Map<String, String>> bundledPdfs = [
+      {'assetPath': 'assets/pdfs/1.pdf', 'fileName': '1.pdf'},
+      {'assetPath': 'assets/pdfs/2.pdf', 'fileName': '2.pdf'},
+      {'assetPath': 'assets/pdfs/3.pdf', 'fileName': '3.pdf'},
+    ];
+
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    Directory pdfDirectory = Directory('${appDocDir.path}/pdfs');
+
+    if (!await pdfDirectory.exists()) {
+      await pdfDirectory.create();
     }
-  }
 
-  ///get all pdf files from every folder
-
-  Future<void> getFiles(String directoryPath) async {
-    try {
-      var rootDirectory = Directory(directoryPath);
-      var directories = rootDirectory.list(recursive: false);
-
-      await for (var element in directories) {
-        if (element is File) {
-          if (element.path.endsWith('.pdf')) {
-            setState(() {
-              _pdfFiles.add(element.path);
-              _filteredFiles = _pdfFiles;
-            });
-          }
-        } else {
-          await getFiles(element.path);
-        }
+    for (var pdf in bundledPdfs) {
+      File pdfFile = File('${pdfDirectory.path}/${pdf['fileName']}');
+      if (!await pdfFile.exists()) {
+        ByteData data = await rootBundle.load(pdf['assetPath']!);
+        List<int> bytes = data.buffer.asUint8List();
+        await pdfFile.writeAsBytes(bytes, flush: true);
       }
-    } catch (e) {
-      // Handle the exception
     }
   }
 
-  ///for searching
+  /// Loads PDFs from the dedicated app folder
+  Future<void> loadPDFFiles() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    Directory pdfDirectory = Directory('${appDocDir.path}/pdfs');
+
+    List<FileSystemEntity> files = pdfDirectory.listSync();
+    setState(() {
+      _pdfFiles = files
+          .where((file) => file is File && file.path.endsWith('.pdf'))
+          .map((file) => file.path)
+          .toList();
+      _filteredFiles = _pdfFiles;
+    });
+  }
+
+  /// Filters PDF files based on search query
   void filterFiles(String query) {
     setState(() {
       _filteredFiles = _pdfFiles
           .where((file) =>
-              file.split('/').last.toLowerCase().contains(query.toLowerCase()))
+          file.split('/').last.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SecureApplication(
-      
-      child: SecureGate(
-        blurr: 0, // Prevents screen recording
-        opacity: 1,   // Full visibility when app is active
-        lockedBuilder: (context, secure) => Center(child: CircularProgressIndicator()),
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: _isSearching
-                ? TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search PDFs....",
-                      border: InputBorder.none,
-                    ), // InputDecoration
-                    onChanged: (value) {
-                      filterFiles(value);
-                    },
-                  ) // TextField
-                : Text(
-                    "PDF Reader",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-            backgroundColor: Colors.white,
-            elevation: 0,
-            actions: [
-              IconButton(
-                iconSize: 30,
-                onPressed: () {
-                  setState(() {
-                    _isSearching = !_isSearching;
-                    _filteredFiles = _pdfFiles;
-                  });
-                },
-                icon: Icon(_isSearching ? Icons.cancel : Icons.search),
-              ), // IconButton
-            ], // Text
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: _isSearching
+            ? TextField(
+          decoration: const InputDecoration(
+            hintText: "Search PDFs....",
+            border: InputBorder.none,
           ),
-          body: _filteredFiles.isEmpty
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : ListView.builder(
-                  itemCount: _filteredFiles.length,
-                  itemBuilder: (context, index) {
-                    String filePath = _filteredFiles[index];
-                    String fileName = path.basename(filePath);
-                    return Card(
-                      color: Colors.white,
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      elevation: 4,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ), // RoundedRectangleBorder
-                      child: ListTile(
-                        title: Text(
-                          fileName,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ), // Text
-                        leading: Icon(
-                          Icons.picture_as_pdf,
-                          color: Colors.redAccent,
-                          size: 30,
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 18,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PdfViewScreen(
-                                        pdfName: fileName,
-                                        pdfPath: filePath,
-                                      )));
-                        },
-                      ),
-                    );
-                  },
-                ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              ///to refresh lisr of pdf...
-              baseDirectory();
-            },
-            backgroundColor: Colors.white,
-            child: Icon(Icons.refresh),
-          ),
+          onChanged: (value) {
+            filterFiles(value);
+          },
+        )
+            : const Text(
+          "PDF Reader",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            iconSize: 30,
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+                _filteredFiles = _pdfFiles;
+              });
+            },
+            icon: Icon(_isSearching ? Icons.cancel : Icons.search),
+          ),
+        ],
+      ),
+      body: _filteredFiles.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+        itemCount: _filteredFiles.length,
+        itemBuilder: (context, index) {
+          String filePath = _filteredFiles[index];
+          String fileName = path.basename(filePath);
+          return Card(
+            color: Colors.white,
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: ListTile(
+              title: Text(
+                fileName,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              leading: const Icon(
+                Icons.picture_as_pdf,
+                color: Colors.redAccent,
+                size: 30,
+              ),
+              trailing: const Icon(
+                Icons.arrow_forward_ios,
+                size: 18,
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PdfViewScreen(
+                          pdfName: fileName,
+                          pdfPath: filePath,
+                        )));
+              },
+            ),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          loadPDFFiles();
+        },
+        backgroundColor: Colors.white,
+        child: const Icon(Icons.refresh),
       ),
     );
   }
