@@ -1,0 +1,2 @@
+G:/PDF app/pdf-reader/android/app/.cxx/Debug/612h5u3a/x86/CMakeFiles/edit_cache.dir
+G:/PDF app/pdf-reader/android/app/.cxx/Debug/612h5u3a/x86/CMakeFiles/rebuild_cache.dir

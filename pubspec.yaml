@@ -40,6 +40,7 @@ dependencies:
   external_path:
   flutter_pdfview:
   path_provider:
+  no_screenshot:
 dev_dependencies:
   flutter_test:
     sdk: flutter

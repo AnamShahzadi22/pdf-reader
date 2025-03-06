@@ -13,6 +13,8 @@ class PdfViewScreen extends StatefulWidget {
 class _PdfViewScreenState extends State<PdfViewScreen> {
   int totalPages =0;
   int currentPages =0;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

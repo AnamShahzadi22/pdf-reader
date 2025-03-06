@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:no_screenshot/no_screenshot.dart';
 import 'package:pdf_reader/home_screen.dart';
 
 void main()async {
-  //await  FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  final _noScreenShot = NoScreenshot.instance;
+  await _noScreenShot.screenshotOff();
   runApp(const MyApp());
 }
 
