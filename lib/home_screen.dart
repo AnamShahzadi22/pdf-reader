@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:no_screenshot/no_screenshot.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
@@ -16,10 +17,19 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> _pdfFiles = [];
   List<String> _filteredFiles = [];
   bool _isSearching = false;
+  final NoScreenshot _noScreenShot = NoScreenshot.instance;
+
+
+  @override
+  void dispose() {
+    _noScreenShot.screenshotOn(); // Re-enable screenshot when leaving the screen
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
+    _noScreenShot.screenshotOff(); // Disable screenshot when PDF is opened
     copyBundledPdfs().then((_) {
       loadPDFFiles();
     });

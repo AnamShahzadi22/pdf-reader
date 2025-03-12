@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:no_screenshot/no_screenshot.dart';
 
 class PdfViewScreen extends StatefulWidget {
   final String pdfPath;
@@ -13,6 +14,19 @@ class PdfViewScreen extends StatefulWidget {
 class _PdfViewScreenState extends State<PdfViewScreen> {
   int totalPages =0;
   int currentPages =0;
+  final NoScreenshot _noScreenShot = NoScreenshot.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _noScreenShot.screenshotOff(); // Disable screenshot when PDF is opened
+  }
+
+  @override
+  void dispose() {
+    _noScreenShot.screenshotOn(); // Re-enable screenshot when leaving the screen
+    super.dispose();
+  }
 
 
   @override

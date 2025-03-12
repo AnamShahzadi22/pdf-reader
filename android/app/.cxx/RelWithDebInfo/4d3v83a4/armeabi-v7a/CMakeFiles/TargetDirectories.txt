@@ -1,0 +1,2 @@
+G:/PDF app/pdf-reader/android/app/.cxx/RelWithDebInfo/4d3v83a4/armeabi-v7a/CMakeFiles/edit_cache.dir
+G:/PDF app/pdf-reader/android/app/.cxx/RelWithDebInfo/4d3v83a4/armeabi-v7a/CMakeFiles/rebuild_cache.dir
