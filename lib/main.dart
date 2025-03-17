@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:no_screenshot/no_screenshot.dart';
-import 'package:pdf_reader/home_screen.dart';
 import 'package:pdf_reader/routes/app_routes.dart';
 import 'package:pdf_reader/style/style.dart';
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
-  final _noScreenShot = NoScreenshot.instance;
-  await _noScreenShot.screenshotOff();
+  final noScreenShot = NoScreenshot.instance;
+  await noScreenShot.screenshotOff();
   runApp(const MyApp());
 }
 
@@ -34,14 +33,14 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             appBarTheme: const AppBarTheme(surfaceTintColor: Colors.transparent),
             textButtonTheme: TextButtonThemeData(
-              style: ButtonStyle().copyWith(
+              style: const ButtonStyle().copyWith(
                 backgroundColor: const WidgetStatePropertyAll(btnColor),
                 foregroundColor: const WidgetStatePropertyAll(blackColor),
                 padding: WidgetStateProperty.all(
-                  const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 ),
-                side: WidgetStatePropertyAll(
-                  const BorderSide(color: Colors.transparent, width: 2),
+                side: const WidgetStatePropertyAll(
+                  BorderSide(color: Colors.transparent, width: 2),
                 ),
 
                 textStyle: const WidgetStatePropertyAll(
@@ -54,19 +53,13 @@ class MyApp extends StatelessWidget {
 
                 ///for size on screen
                 minimumSize: WidgetStatePropertyAll(
-                    Size(MediaQuery.sizeOf(context).width, 55)),
+                    Size(MediaQuery.sizeOf(context).width, 50)),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
               ),
-            ),
-            inputDecorationTheme: const InputDecorationTheme(
-              // errorStyle: TextStyle(
-              //   color: btnColor,
-              //   fontSize: 13,
-              // ),
             ),
             colorScheme: ColorScheme.fromSeed(seedColor: purpleColor),
             useMaterial3: true,

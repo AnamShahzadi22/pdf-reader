@@ -4,8 +4,8 @@ import 'package:no_screenshot/no_screenshot.dart';
 
 class PdfViewScreen extends StatefulWidget {
   final String pdfPath;
-  final String pdfName;
-  const PdfViewScreen({super.key, required this.pdfPath, required this.pdfName});
+  // final String pdfName;
+  const PdfViewScreen({super.key, required this.pdfPath});
 
   @override
   State<PdfViewScreen> createState() => _PdfViewScreenState();
@@ -35,7 +35,7 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(widget.pdfName),
+        //title: Text(widget.pdfName),
       ),
       body: PDFView(
         filePath: widget.pdfPath,

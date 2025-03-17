@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../routes/app_routes.dart';
 
 class SplashService {
-  /// Start the timer and navigate based on onboarding status
+  /// Start the timer and navigate based on on boarding status
   void startTimer(BuildContext context) {
     Timer(const Duration(seconds: 3), () async {
       if (context.mounted) {
@@ -15,24 +13,8 @@ class SplashService {
     });
   }
 
-  /// Decide whether to show the onboarding page or directly navigate to the Free Tools page
+  /// Decide whether to show the on boarding page or directly navigate to the Free Tools page
   Future<void> navigateToPage(BuildContext context) async {
-    // final prefs = await SharedPreferences.getInstance();
-    // final isOnboardingSeen = prefs.getBool('isOnboardingSeen') ?? false;
-
-    // if (isOnboardingSeen) {
-    //
-    //   ///Flow
-    //   // GoRouter.of(context).pushNamed(NamedRoutes.loginpage.name);
-
-      context.goNamed(NamedRoutes.onBoardPage.name);
-
-    // } else {
-    //
-    //   context.goNamed(AppRoutes.selecttoolpage.name);
-    //
-    //
-    //   await prefs.setBool('isOnboardingSeen', true);
-    // }
+    context.goNamed(NamedRoutes.pdfHomePage.name);
   }
 }

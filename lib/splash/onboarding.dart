@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:pdf_reader/routes/app_routes.dart';
-import 'package:pdf_reader/style/style.dart';
+import 'package:pdf_reader/splash/splashservice/splash_service.dart';
 
-class OnBoardingPage extends StatelessWidget {
+import '../style/style.dart';
+
+class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({super.key});
+
+  @override
+  State<OnBoardingPage> createState() => _OnBoardingPageState();
+}
+
+class _OnBoardingPageState extends State<OnBoardingPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    SplashService().startTimer(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,68 +24,50 @@ class OnBoardingPage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: customGreyColor,
       body: Stack(
         children: [
-          // Purple Background Shape
+          /// Background Image positioned below the logo
           Positioned(
-            top: screenHeight * 0.2,
+            top: screenHeight * 0.15,
             left: 0,
             right: 0,
-            child: Container(
-              height: screenHeight * 0.6,
-              decoration: BoxDecoration(
-                color: Colors.purple,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
-                ),
-              ),
+            bottom: 0,
+            child: Image.asset(
+              'assets/images/background_splash.png',
+              fit: BoxFit.cover,
             ),
           ),
 
-          // Content
+          /// Column for content
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: screenHeight * 0.08),
-
-              // Logo
-              Center(
+              Container(
+                width: double.infinity,
+                height: screenHeight * 0.23,
+                alignment: Alignment.center,
+                color: Colors.transparent,
                 child: Image.asset(
-                    'assets/images/intelli_logo.png'
+                  'assets/images/aiplaybooklogo.png',
+                  height: screenHeight * 0.05,
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.1),
+              SizedBox(height: screenHeight * 0.35),
 
-              // Face Image (Mocked with a Container, Replace with an actual image)
-              Center(
-                child: Container(
-                  width: screenWidth * 0.6,
-                  height: screenWidth * 0.6,
-                  decoration: BoxDecoration(
-                    color: purpleColor,
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: Image.asset(
-                      'assets/images/background_splash.png'
-                  ),
-                ),
-              ),
-
-              SizedBox(height: screenHeight * 0.04),
-
-              // Main Text
+              /// Main Text
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                 child: Text(
                   "Let's Learn With Lots Of Fun!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: screenWidth * 0.06,
+                    height: 1.2,
+                    fontSize: screenWidth * 0.1,
+                    fontFamily: 'PoltawskiNowy',
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: whiteColor,
                   ),
                 ),
               ),
@@ -88,7 +82,9 @@ class OnBoardingPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: screenWidth * 0.04,
-                    color: Colors.white70,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                    color: whiteColor,
                   ),
                 ),
               ),
@@ -96,21 +92,25 @@ class OnBoardingPage extends StatelessWidget {
           ),
 
           // Get Started Button
-          Positioned(
-            bottom: screenHeight * 0.05,
-            left: screenWidth * 0.1,
-            right: screenWidth * 0.1,
-            child: TextButton(onPressed: (){
-              GoRouter.of(context).pushNamed(NamedRoutes.homePage.name);
-            }, child: Text(
-              "Get Started",
-              style: TextStyle(
-                fontSize: screenWidth * 0.05,
-                fontWeight: FontWeight.bold,
-                color: blackColor,
-              ),
-            ),),
-          ),
+          // Positioned(
+          //   bottom: screenHeight * 0.05,
+          //   left: screenWidth * 0.1,
+          //   right: screenWidth * 0.1,
+          //   child: TextButton(
+          //
+          //     onPressed: () {
+          //       GoRouter.of(context).pushNamed(NamedRoutes.pdfHomePage.name);
+          //     },
+          //     child: Text(
+          //       "Get Started",
+          //       style: TextStyle(
+          //         fontSize: screenWidth * 0.05,
+          //         fontWeight: FontWeight.bold,
+          //         color: Colors.black,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
