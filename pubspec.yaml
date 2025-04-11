@@ -46,6 +46,9 @@ dependencies:
   shared_preferences:
   gradient_borders:
   flutter_svg:
+  url_launcher:
+  http:
+  change_app_package_name:
 
 dev_dependencies:
   flutter_test:

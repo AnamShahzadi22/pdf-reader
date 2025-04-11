@@ -1,5 +1,6 @@
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pdf_reader/about_us_page.dart';
 import 'package:pdf_reader/home_screen.dart';
 import 'package:pdf_reader/pdf_home.dart';
 import 'package:pdf_reader/splash/onboarding.dart';
@@ -19,6 +20,7 @@ final class AppRoutes {
   static const String homePage = "/homepage";
   static const String pdfHomePage = "/pdfHomePage";
   static const String pdfViewPage = "/pdfViewPage";
+  static const String aboutUsPage = "/aboutUsPage";
 
 
 
@@ -45,6 +47,11 @@ final class AppRoutes {
       builder: (context, state) => PdfHomePage(),
     ),
     GoRoute(
+      path: aboutUsPage,
+      name: NamedRoutes.aboutUsPage.name,
+      builder: (context, state) => AboutUsPage(),
+    ),
+    GoRoute(
       path: AppRoutes.pdfViewPage,
       name: NamedRoutes.pdfViewPage.name,
       builder: (context, state) {
@@ -64,6 +71,7 @@ enum NamedRoutes {
   onBoardPage,
   homePage,
   pdfHomePage,
-  pdfViewPage
+  pdfViewPage,
+  aboutUsPage
 
 }

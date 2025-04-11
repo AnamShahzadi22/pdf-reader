@@ -108,7 +108,7 @@ class _PdfHomePageState extends State<PdfHomePage> {
                     ),
                   ),
                   TextSpan(
-                    text: "AI Play Book",
+                    text: "AI Playbook",
                     style: TextStyle(
                       color: whiteColor,
                       fontFamily: 'PoltawskiNowy',
@@ -208,7 +208,9 @@ class _PdfHomePageState extends State<PdfHomePage> {
                             ),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          GoRouter.of(context).pushNamed(NamedRoutes.aboutUsPage.name);
+                        },
                         child: const Text(
                           "About Us",
                           style: TextStyle(color: blackColor, fontSize: 16),

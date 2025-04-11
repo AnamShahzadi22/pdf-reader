@@ -29,13 +29,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         children: [
           /// Background Image positioned below the logo
           Positioned(
-            top: screenHeight * 0.15,
+            top: screenHeight * 0.1,
             left: 0,
             right: 0,
             bottom: 0,
             child: Image.asset(
               'assets/images/background_splash.png',
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
 
@@ -54,7 +54,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                 ),
               ),
 
-              SizedBox(height: screenHeight * 0.35),
+              SizedBox(height: screenHeight * 0.4),
 
               /// Main Text
               Padding(

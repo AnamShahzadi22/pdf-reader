@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:no_screenshot/no_screenshot.dart';
+import 'package:pdf_reader/style/style.dart';
 
 class PdfViewScreen extends StatefulWidget {
   final String pdfPath;
@@ -19,7 +20,7 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
   @override
   void initState() {
     super.initState();
-    _noScreenShot.screenshotOff(); // Disable screenshot when PDF is opened
+    _noScreenShot.screenshotOff();
   }
 
   @override
@@ -32,10 +33,18 @@ class _PdfViewScreenState extends State<PdfViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:  whiteColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        //title: Text(widget.pdfName),
+        backgroundColor:  whiteColor,
+        centerTitle: true,
+        leading: IconButton(onPressed: (){Navigator.pop(context);}, icon: const Icon(Icons.arrow_back_ios_new_outlined)),
+        title: const Text('AI Playbook',
+          style: TextStyle(
+          color: darkPurpleColor,
+          fontFamily: 'PoltawskiNowy',
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),),
       ),
       body: PDFView(
         filePath: widget.pdfPath,
